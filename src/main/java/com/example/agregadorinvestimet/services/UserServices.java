@@ -1,5 +1,6 @@
 package com.example.agregadorinvestimet.services;
 import com.example.agregadorinvestimet.controller.CreateUserDto;
+import com.example.agregadorinvestimet.controller.UpdateUserDto;
 import com.example.agregadorinvestimet.entities.User;
 import com.example.agregadorinvestimet.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -41,5 +42,25 @@ public class UserServices {
         if (userExists) {
             userRepository.deleteById(UUID.fromString(userId));
         }
+    }
+
+    public User updateUserById(String userId, UpdateUserDto updateUserDto){
+
+        var userEntity = userRepository.findById(UUID.fromString(userId));
+
+        if (userEntity.isPresent()) {
+            var  user = userEntity.get();
+
+            if (updateUserDto.username() != null) {
+                user.setUsername(updateUserDto.username());
+            }
+
+            if (updateUserDto.password() != null) {
+                user.setPassword(updateUserDto.password());
+            }
+
+            userRepository.save(user);
+        }
+        return null;
     }
 }
